@@ -79,7 +79,9 @@
           state.generate();
           state.stage = 'validation';
         }
-        state.base64 = `data:text/plain;charset=utf-8,${encodeURIComponent(state.randoms.join(','))}`;
+        state.base64 = `data:text/csv;charset=utf-8,${
+          encodeURIComponent(state.randoms.map((r) => `"${r.toString().replace('.', ',')}"`).join('\n'))
+        }`;
       },
       onReset: () => {
         state.stage = 'generation';

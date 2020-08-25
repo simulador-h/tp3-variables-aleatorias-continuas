@@ -8,7 +8,7 @@
         />
 
         <q-toolbar-title>
-          Simulador H - TP2
+          Simulador H - TP3
         </q-toolbar-title>
       </q-toolbar>
     </q-header>

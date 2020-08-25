@@ -199,7 +199,7 @@ module.exports = configure((ctx) => ({
     builder: {
       // https://www.electron.build/configuration/configuration
 
-      appId: 'tp2-toma-datos',
+      appId: 'tp3-variables-aleatorias-continuas',
     },
 
     // More info: https://quasar.dev/quasar-cli/developing-electron-apps/node-integration
