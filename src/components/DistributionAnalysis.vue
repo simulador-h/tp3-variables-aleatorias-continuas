@@ -13,13 +13,22 @@
           lazy-rules
           :rules="[ val => val ]"
         />
+
+        <q-input
+          v-model.number="analysisParameters.confidenceLevel"
+          label="Nivel de Confianza *"
+          type="text"
+          filled
+          lazy-rules
+          :rules="[ val => (val && val > 0 && val < 1) || 'Requerido | [0-1]' ]"
+        />
         <q-btn label="Validar" type="submit" color="secondary" fab />
       </div>
     </q-form>
 
-    <div class="row q-col-gutter-xl">
+    <div v-if="probabilityDistributions.length" class="row q-col-gutter-xl">
       <div class="col-xs-12 col-md-8">
-        <bar-chart v-if="probabilityDistributions.length" :data="chartData" :options="chartOptions" />
+        <bar-chart :data="chartData" :options="chartOptions" />
       </div>
 
       <div class="col-xs-12 col-md-4">
@@ -257,9 +266,8 @@
 
       updateChart(probabilityDistribution: IProbabilityDistribution) {
         state.chartData = {
-          labels: new Array(state.analysisParameters.intervals).fill(undefined).map(
-            (_v, idx) => {
-              const [lowerBound, upperBound] = state.analysisParameters.bounds[idx];
+          labels: state.analysisParameters.bounds.map(
+            ([lowerBound, upperBound]) => {
               const midValue = (upperBound + lowerBound) / 2;
               return midValue.toFixed(2);
             },
@@ -282,8 +290,6 @@
             hoverBackgroundColor: 'rgba(245 108 108 / 60%)',
           }],
         };
-
-        console.log({ ...probabilityDistribution });
       },
 
       onSubmit() {

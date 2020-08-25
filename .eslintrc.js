@@ -68,6 +68,7 @@ module.exports = {
 
   // add your custom rules here
   rules: {
+    'no-unused-vars': 'warn',
     'no-param-reassign': 'off',
     'no-confusing-arrow': ['error', {
       allowParens: true,

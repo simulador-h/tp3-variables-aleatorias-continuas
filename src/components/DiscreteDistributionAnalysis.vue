@@ -10,6 +10,7 @@
           label="Cantidad de Intervalos *"
           type="text"
           filled
+          disable
           lazy-rules
           :rules="[ val => (val && val > 0) || 'Requerido | Mayor a 0' ]"
         />
@@ -20,16 +21,15 @@
           type="text"
           filled
           lazy-rules
-          disable
           :rules="[ val => (val && val > 0 && val < 1) || 'Requerido | [0-1]' ]"
         />
         <q-btn label="Validar" type="submit" color="secondary" fab />
       </div>
     </q-form>
 
-    <div class="row q-col-gutter-xl">
+    <div v-if="probabilityDistributions.length" class="row q-col-gutter-xl">
       <div class="col-xs-12 col-md-8">
-        <bar-chart v-if="probabilityDistributions.length" :data="chartData" :options="chartOptions" />
+        <bar-chart :data="chartData" :options="chartOptions" />
       </div>
 
       <div class="col-xs-12 col-md-4">
@@ -90,8 +90,8 @@
       dataValues: props.data,
       statisticProperties: {} as IStatisticProperties,
       analysisParameters: {
-        intervals: Math.trunc(
-          Math.sqrt(props.data.length),
+        intervals: (
+          Math.max(...props.data) - Math.min(...props.data) + 1
         ),
         confidenceLevel: 0.95,
       } as IAnalysisParameters,
@@ -143,24 +143,11 @@
         /* eslint-enable @typescript-eslint/no-unsafe-call */
       },
 
-      correctIntervals() {
-        const { intervals } = state.analysisParameters;
-        const { min, max } = state.statisticProperties;
-
-        if ((max - min) < intervals) {
-          state.analysisParameters.intervals = (max - min);
-        }
-      },
-
       defineAnalysisParameters() {
         const { intervals, confidenceLevel } = state.analysisParameters;
         const { min, max } = state.statisticProperties;
 
-        // const intervals = Math.trunc(
-        //   Math.sqrt(n),
-        // );
-
-        const step = (max - min) / intervals;
+        const step = (max - min + 1) / intervals;
 
         const bounds = new Array(intervals)
           .fill(undefined)
@@ -176,7 +163,7 @@
 
       analyseData() {
         const { n, min, max, rate } = state.statisticProperties;
-        const { intervals, bounds } = state.analysisParameters;
+        const { intervals, step, bounds } = state.analysisParameters;
 
         const uniformProbabilities = [];
         const poissonProbabilities = [];
@@ -189,10 +176,11 @@
           /* eslint-disable @typescript-eslint/no-unsafe-assignment */
           /* eslint-disable @typescript-eslint/no-unsafe-member-access */
           /* eslint-disable @typescript-eslint/no-unsafe-call */
-          const uP = jStat.uniform.cdf(upperBound, min, max) - jStat.uniform.cdf(lowerBound, min, max);
+          const uP = jStat.uniform.cdf(upperBound, min, max + 1) - jStat.uniform.cdf(lowerBound, min, max + 1);
           uniformProbabilities.push(uP);
 
-          const pP = jStat.poisson.pdf(lowerBound, rate);
+          // const pP = jStat.poisson.pdf(lowerBound, rate);
+          const pP = jStat.poisson.cdf(lowerBound, rate) - jStat.poisson.cdf(lowerBound - step, rate);
           poissonProbabilities.push(pP);
 
           const obsF = state.dataValues.reduce(
@@ -255,12 +243,8 @@
 
       updateChart(probabilityDistribution: IProbabilityDistribution) {
         state.chartData = {
-          labels: new Array(state.analysisParameters.intervals).fill(undefined).map(
-            (_v, idx) => {
-              const [lowerBound, upperBound] = state.analysisParameters.bounds[idx];
-              const midValue = (upperBound + lowerBound) / 2;
-              return midValue.toFixed(2);
-            },
+          labels: state.analysisParameters.bounds.map(
+            ([lowerBound, upperBound]) => lowerBound.toFixed(0), // eslint-disable-line @typescript-eslint/no-unused-vars
           ),
           datasets: [{
             label: 'Frecuencias Esperadas',
@@ -280,13 +264,10 @@
             hoverBackgroundColor: 'rgba(245 108 108 / 60%)',
           }],
         };
-
-        console.log({ ...probabilityDistribution });
       },
 
       onSubmit() {
         state.defineStatisticProperties();
-        state.correctIntervals();
         state.defineAnalysisParameters();
         state.analyseData();
 
