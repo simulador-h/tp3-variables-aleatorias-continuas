@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-var-requires */
 const express = require('express');
 const serveStatic = require('serve-static');
 const history = require('connect-history-api-fallback');
