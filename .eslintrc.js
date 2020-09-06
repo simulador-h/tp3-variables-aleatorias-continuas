@@ -142,5 +142,11 @@ module.exports = {
         '@typescript-eslint/no-var-requires': 'off',
       },
     },
+    {
+      files: ['*.vue'],
+      rules: {
+        'indent': 'off',
+      },
+    },
   ],
 };

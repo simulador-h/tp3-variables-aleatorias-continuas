@@ -52,6 +52,10 @@
         icon: 'home',
         path: '/',
       }, {
+        name: 'Pruebas de Bondad',
+        icon: 'school',
+        path: '/goodness-of-fit',
+      }, {
         name: 'Variables Aleatorias',
         icon: 'star',
         path: '/random-variables',
