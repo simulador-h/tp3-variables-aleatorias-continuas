@@ -4,18 +4,23 @@
   import { Bar } from 'vue-chartjs';
 
   export default defineComponent({
-    name: 'bar-chart',
+    name: 'BarChart',
     extends: Bar,
-    props: ['data', 'options'],
+    props: {
+      data: {
+        type: Object,
+        required: true,
+      },
+      options: {
+        type: Object,
+        default: () => ({}),
+      },
+    },
     watch: {
       options() {
-        // eslint-disable-next-line
-        this.$data._chart.destroy();
         this.renderChart(this.data, this.options);
       },
       data() {
-        // eslint-disable-next-line
-        this.$data._chart.destroy();
         this.renderChart(this.data, this.options);
       },
     },

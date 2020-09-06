@@ -3,18 +3,18 @@ import { RouteConfig } from 'vue-router';
 const routes: RouteConfig[] = [
   {
     path: '/',
-    component: () => import('layouts/MainLayout.vue'),
+    component: (): any => import('layouts/MainLayout.vue'),
     children: [
-      { path: '', component: () => import('pages/Index.vue') },
-      { path: '/goodness-of-fit', component: () => import('pages/GoodnessOfFit.vue') },
-      { path: '/random-variables', component: () => import('pages/RandomVariables.vue') },
+      { path: '', component: (): any => import('pages/Index.vue') },
+      { path: '/goodness-of-fit', component: (): any => import('pages/GoodnessOfFit.vue') },
+      { path: '/random-variables', component: (): any => import('pages/RandomVariables.vue') },
     ],
   },
 
   // Always leave last
   {
     path: '*',
-    component: () => import('pages/Error404.vue'),
+    component: (): any => import('pages/Error404.vue'),
   },
 ];
 

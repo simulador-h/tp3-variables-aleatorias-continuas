@@ -3,6 +3,14 @@
   "compilerOptions": {
     "baseUrl": ".",
     "paths": {
+      "app/*": ["*"],
+      "src/*": ["src/*"],
+      "assets/*": ["src/assets/*"],
+      "boot/*": ["src/boot/*"],
+      "components/*": ["src/components/*"],
+      "layouts/*": ["src/layouts/*"],
+      "pages/*": ["src/pages/*"],
+
       "interfaces": ["src/interfaces/"],
       "interfaces/*": ["src/interfaces/*"]
     }

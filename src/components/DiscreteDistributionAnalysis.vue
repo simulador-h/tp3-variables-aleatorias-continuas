@@ -184,7 +184,9 @@
           poissonProbabilities.push(pP);
 
           const obsF = state.dataValues.reduce(
-            (f, v) => ((i === intervals - 1 && v >= lowerBound) || (v >= lowerBound && v < upperBound) ? f + 1 : f), 0,
+            (f, v) => (
+              (i === intervals - 1 && v >= lowerBound) || (v >= lowerBound && v < upperBound) ? f + 1 : f
+            ), 0,
           );
           observedFrequencies.push(obsF);
         }
@@ -244,7 +246,8 @@
       updateChart(probabilityDistribution: IProbabilityDistribution) {
         state.chartData = {
           labels: state.analysisParameters.bounds.map(
-            ([lowerBound, upperBound]) => lowerBound.toFixed(0), // eslint-disable-line @typescript-eslint/no-unused-vars
+            // eslint-disable-next-line @typescript-eslint/no-unused-vars
+            ([lowerBound, upperBound]) => lowerBound.toFixed(0),
           ),
           datasets: [{
             label: 'Frecuencias Esperadas',

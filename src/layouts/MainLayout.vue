@@ -3,8 +3,10 @@
     <!-- master header -->
     <q-header class="bg-primary text-white">
       <q-toolbar>
-        <q-btn icon="menu" flat dense round
-               @click="drawerVisible = !drawerVisible"
+        <q-btn
+          flat dense round
+          icon="menu"
+          @click="drawerVisible = !drawerVisible"
         />
 
         <q-toolbar-title>
@@ -13,16 +15,18 @@
       </q-toolbar>
     </q-header>
 
-    <q-drawer v-model="drawerVisible" :mini="!drawerVisible || drawerMinimized"
-              behavior="desktop"
-              mini-to-overlay bordered
-              @mouseenter="drawerMinimized = false"
-              @mouseleave="drawerMinimized = true"
+    <q-drawer
+      v-model="drawerVisible"
+      :mini="!drawerVisible || drawerMinimized"
+      behavior="desktop" mini-to-overlay bordered
+      @mouseenter="drawerMinimized = false"
+      @mouseleave="drawerMinimized = true"
     >
       <q-scroll-area class="fit">
         <q-list padding>
-          <drawer-link v-for="link in drawerLinks" :key="link.name"
-                       :link="link"
+          <drawer-link
+            v-for="link in drawerLinks" :key="link.name"
+            :link="link"
           />
         </q-list>
       </q-scroll-area>
@@ -31,7 +35,6 @@
     <q-page-container>
       <router-view />
     </q-page-container>
-
   </q-layout>
 </template>
 
